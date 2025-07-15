@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PageSnap</title>
+    <style>
+      body {
+        font-family:sans-serif;
+        min-width: 500px;
+        min-height: 300px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #212529;
+      }
+
+      h2 {
+        color: #2c3e50;
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      select,
+      button {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        transition: all 0.3s ease;
+      }
+
+      select {
+        background-color: #ffffff;
+        color: #212529;
+      }
+
+      button {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0b5ed7;
+      }
+
+      #copy-btn {
+        background-color: #198754;
+      }
+
+      #copy-btn:hover {
+        background-color: #157347;
+      }
+
+      #result {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        min-height: 160px;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        line-height: 1.6;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 160px;
+      }
+
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #0d6efd;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      footer {
+        margin-top: 15px;
+        text-align: center;
+        font-size: 12px;
+        color: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Summary of Page</h2>
+
+    <div class="controls">
+      <select id="summary-type">
+        <option value="brief">Brief Summary</option>
+        <option value="detailed">Detailed Summary</option>
+        <option value="bullets">Bullet Points</option>
+      </select>
+      <button id="summarize">Summarize Page</button>
+      <button id="copy-btn">Copy Summary</button>
+    </div>
+
+    <div id="result">
+      Select a summary type and click Summarize Page to get started.
+    </div>
+
+    <footer>Powered by PageSnap</footer>
+
+    <script src="config.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
