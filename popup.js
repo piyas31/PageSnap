@@ -42,6 +42,7 @@ document.getElementById("summarize").addEventListener("click", async () => {
   });
 });
 
+
 document.getElementById("copy-btn").addEventListener("click", () => {
   const summaryText = document.getElementById("result").innerText;
 
@@ -117,4 +118,58 @@ async function getGeminiSummary(text, summaryType, apiKey) {
     console.error("Error calling Gemini API:", error);
     throw new Error("Failed to generate summary. Please try again later.");
   }
+}
+
+//add new feature for translate into bangla, that's the code
+
+document.getElementById("translate-btn").addEventListener("click", async () => {
+  const resultDiv = document.getElementById("result");
+  const originalText = resultDiv.innerText;
+
+  if (!originalText || originalText.trim() === "") {
+    resultDiv.innerText = "Nothing to translate.";
+    return;
+  }
+
+  resultDiv.innerHTML = '<div class="loading"><div class="loader"></div></div>';
+
+  chrome.storage.sync.get(["geminiApiKey"], async (result) => {
+    if (!result.geminiApiKey) {
+      resultDiv.innerText = "API key not found. Please set your API key in the extension options.";
+      return;
+    }
+
+    try {
+      const translated = await translateToBangla(originalText, result.geminiApiKey);
+      resultDiv.innerText = translated;
+    } catch (err) {
+      resultDiv.innerText = `Error: ${err.message || "Could not translate"}`;
+    }
+  });
+});
+
+async function translateToBangla(text, apiKey) {
+  const prompt = `Translate the following text to Bengali (Bangla). Keep the meaning intact and make it natural:\n\n${text}`;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.4 },
+      }),
+    }
+  );
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error?.message || "Translation failed");
+  }
+
+  return (
+    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+    "Translation unavailable."
+  );
 }
